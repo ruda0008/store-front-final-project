@@ -1,17 +1,25 @@
 <template>
-  <TopNav :cartItemCount="cartItemCount"/>
-  <div class="main-container">
-    <router-view
-      :products="products"
-      :cartItems="cartItems"
-      @addToCart="addToCart"
-      @removeFromCart="removeFromCart"
-      @submitOrder="submitOrder"
-    ></router-view>
+  <div class="app-wrapper">
+    <TopNav :cartItemCount="cartItemCount"/>
+    <div class="main-content">
+      <router-view
+        :products="products"
+        :cartItems="cartItems"
+        @addToCart="addToCart"
+        @removeFromCart="removeFromCart"
+        @submitOrder="submitOrder"
+      ></router-view>
+    </div>
+    <footer class="bby-footer">
+      <div class="footer-links">
+        <span>Accessibility</span>
+        <span>Terms & Conditions</span>
+        <span>Privacy Policy</span>
+        <span>Interest-Based Ads</span>
+      </div>
+      <p>© 2025 Best Pets Electronics. All rights reserved.</p>
+    </footer>
   </div>
-  <footer>
-    <p>© 2025 Best Buy Electronics. All rights reserved.</p>
-  </footer>
 </template>
 
 <script>
@@ -43,18 +51,14 @@ export default {
       fetch('/products')
         .then(response => response.json())
         .then(products => {
-          console.log('success getting proxy products')
           this.products = products
         })
         .catch(error => {
-          console.log(error)
-          alert('Error occurred while fetching products')
+          console.error(error)
         })
     },
     addToCart({ productId, quantity }) {
-      const existingCartItem = this.cartItems.find(
-        item => item.product.id == productId
-      )
+      const existingCartItem = this.cartItems.find(item => item.product.id == productId)
       if (existingCartItem) {
         existingCartItem.quantity += quantity
       } else {
@@ -68,86 +72,79 @@ export default {
     submitOrder() {
       const order = {
         customerId: Math.floor(Math.random() * 10000000000).toString(),
-        items: this.cartItems.map(item => {
-          return {
-            productId: item.product.id,
-            quantity: item.quantity,
-            price: item.product.price
-          }
-        })
+        items: this.cartItems.map(item => ({
+          productId: item.product.id,
+          quantity: item.quantity,
+          price: item.product.price
+        }))
       }
-      console.log(JSON.stringify(order));
-
       fetch(`/order`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(order)
+      }).then(response => {
+        if (response.ok) {
+          this.cartItems = []
+          alert('Order submitted successfully')
+        } else {
+          alert('Error submitting order')
+        }
       })
-        .then(response => {
-          console.log(response)
-          if (!response.ok) {
-            alert('Error occurred while submitting order')
-          } else {
-            this.cartItems = []
-            alert('Order submitted successfully')
-          }
-        })
-        .catch(error => {
-          console.log(error)
-          alert('Error occurred while submitting order')
-        })
     }
-  },
+  }
 }
 </script>
 
 <style>
-/* Global Resets and Best Buy-ish Styles */
+/* BEST BUY GLOBAL RESET */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
 body {
-  background-color: #f0f2f5; /* Light gray background */
   margin: 0;
   padding: 0;
-  font-family: 'Human BBY', Arial, sans-serif; /* Mimic their font */
+  background-color: #f0f2f4; /* Official Light Gray BG */
+  font-family: 'Inter', sans-serif; /* Closest free match to Human BBY */
+  -webkit-font-smoothing: antialiased;
   color: #1d252c;
 }
 
-#app {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  margin-top: 80px; /* Space for fixed header */
-  min-height: 100vh;
+.app-wrapper {
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
 }
 
-.main-container {
+.main-content {
   flex: 1;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
+  max-width: 1400px;
   width: 100%;
+  margin: 0 auto;
+  padding: 24px;
   box-sizing: border-box;
+  padding-top: 90px; /* Offset for fixed header */
 }
 
-footer {
-  background-color: #f0f2f5;
+.product-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.bby-footer {
+  background-color: #f0f2f4;
+  border-top: 1px solid #dcdcdc;
+  padding: 40px 20px;
+  text-align: center;
+  font-size: 11px;
   color: #555;
-  padding: 2rem;
-  border-top: 1px solid #ccc;
-  margin-top: auto;
-  font-size: 0.9rem;
 }
 
-button {
-  cursor: pointer;
-}
-
-/* Common Utility for Links */
-a {
-  text-decoration: none;
-  color: inherit;
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 10px;
+  color: #0046be;
+  font-weight: 600;
 }
 </style>

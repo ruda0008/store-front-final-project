@@ -1,26 +1,31 @@
 <template>
-  <div class="product-card">
-    <div class="card-image">
-      <img :src="product.image" alt="Product Image">
+  <div class="bby-card">
+    <div class="bby-card-img">
+       <router-link :to="`/product/${product.id}`">
+         <img :src="product.image" alt="Product">
+       </router-link>
     </div>
     
-    <div class="card-content">
-      <router-link :to="`/product/${product.id}`" class="product-title">
+    <div class="bby-card-body">
+      <router-link :to="`/product/${product.id}`" class="bby-title">
         {{ product.name }}
       </router-link>
-      
-      <div class="ratings">⭐⭐⭐⭐☆ (12)</div>
 
-      <div class="price-container">
-        <span class="price-symbol">$</span>
-        <span class="price-value">{{ product.price }}</span>
+      <div class="bby-rating">
+        <span class="stars">★★★★☆</span>
+        <span class="count">(42)</span>
       </div>
       
-      <div class="product-controls">
-        <button class="add-btn" @click="addToCart">
-           <span class="cart-icon">🛒</span> Add to Cart
-        </button>
+      <div class="bby-price-block">
+        <div class="current-price">${{ product.price }}</div>
+        <div class="fulfillment">
+           <span class="check">✔</span> Ready in 1 hour
+        </div>
       </div>
+
+      <button class="bby-add-btn" @click="addToCart">
+        <span class="icon">🛒</span> Add to Cart
+      </button>
     </div>
   </div>
 </template>
@@ -29,110 +34,103 @@
 export default {
   name: 'ProductCard',
   props: ['product'],
-  data() {
-    return {
-      quantity: 1
-    }
-  },
   methods: {
     addToCart() {
-      // Defaulting to quantity 1 for grid view to simplify UI like BestBuy
-      this.$emit('addToCart', {
-        productId: this.product.id,
-        quantity: 1
-      })
+      this.$emit('addToCart', { productId: this.product.id, quantity: 1 })
     }
   }
 }
 </script>
 
 <style scoped>
-.product-card {
-  display: flex;
-  flex-direction: column;
-  background-color: #fff;
+.bby-card {
+  background: white;
   border: 1px solid #e0e6ef;
   border-radius: 4px;
   padding: 16px;
-  transition: box-shadow 0.2s;
+  display: flex;
+  flex-direction: column;
   height: 100%;
-  box-sizing: border-box;
-  text-align: left;
+  transition: box-shadow 0.2s;
 }
 
-.product-card:hover {
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  border-color: #c5cbd5;
+.bby-card:hover {
+  box-shadow: 0 4px 14px rgba(0,0,0,0.1);
 }
 
-.card-image {
-  height: 200px;
+.bby-card-img {
+  height: 180px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 1rem;
+  margin-bottom: 12px;
 }
 
-.card-image img {
-  max-height: 100%;
+.bby-card-img img {
+  max-height: 150px;
   max-width: 100%;
   object-fit: contain;
 }
 
-.product-title {
-  font-size: 1rem;
+.bby-title {
+  color: #0046be;
   font-weight: 600;
-  color: #0046be; /* Link Blue */
-  margin-bottom: 5px;
-  display: block;
+  font-size: 15px;
   line-height: 1.4;
-  height: 45px; /* Limit height for uniform cards */
+  text-decoration: none;
+  margin-bottom: 8px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
-.product-title:hover {
+.bby-title:hover {
   text-decoration: underline;
+  color: #001e73;
 }
 
-.ratings {
-  font-size: 0.8rem;
-  color: #fce803; /* Star color */
-  margin-bottom: 10px;
+.bby-rating {
+  font-size: 12px;
+  color: #0046be;
+  margin-bottom: 12px;
 }
+.stars { color: #ffe000; text-shadow: 0 0 1px #e6a400; font-size: 14px; }
+.count { margin-left: 4px; color: #555; }
 
-.price-container {
+.bby-price-block {
   margin-top: auto;
-  margin-bottom: 15px;
+  margin-bottom: 16px;
 }
 
-.price-symbol {
-  font-size: 0.9rem;
-  vertical-align: top;
-  font-weight: bold;
-}
-
-.price-value {
-  font-size: 1.5rem;
+.current-price {
+  font-size: 22px;
   font-weight: 700;
+  color: #1d252c;
 }
 
-.add-btn {
-  width: 100%;
-  background-color: #ffce00; /* Best Buy Yellow */
-  color: #000;
+.fulfillment {
+    font-size: 12px;
+    color: #318000;
+    margin-top: 4px;
+    font-weight: 600;
+}
+
+.bby-add-btn {
+  background-color: #ffce00;
   border: none;
-  padding: 10px;
-  font-weight: 700;
   border-radius: 4px;
-  font-size: 1rem;
+  color: #000;
+  font-weight: 700;
+  padding: 10px;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  transition: background-color 0.2s;
+  font-size: 14px;
 }
-
-.add-btn:hover {
-  background-color: #ffd933;
+.bby-add-btn:hover {
+    background-color: #ffd933;
 }
 </style>

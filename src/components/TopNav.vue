@@ -1,29 +1,45 @@
 <template>
-  <nav>
-    <div class="nav-container">
-      <div class="logo">
-        <a href="/">
-           <span class="brand-text">Best Buy</span>
-        </a>
-      </div>
-      
-      <div class="search-bar">
-        <input type="text" placeholder="Search for products, brands, and more">
-        <button class="search-btn">🔍</button>
+  <nav class="bby-header">
+    <div class="header-content">
+      <div class="logo-area">
+        <router-link to="/" class="bby-logo">
+          <span class="logo-tag">BEST</span>
+          <span class="logo-tag">PETS</span>
+        </router-link>
       </div>
 
-      <button class="hamburger" @click="toggleNav">
-        <span class="hamburger-icon"></span>
-      </button>
+      <div class="search-container">
+        <input type="text" placeholder="Search Best Pets" />
+        <button class="search-icon-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#0046be" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </button>
+      </div>
 
-      <ul class="nav-links" :class="{ 'nav-links--open': isNavOpen }">
-        <li><router-link to="/" @click="closeNav">Deals</router-link></li>
-        <li class="cart-link">
-          <router-link to="/cart" @click="closeNav">
-            🛒 Cart <span class="badge" v-if="cartItemCount > 0">{{ cartItemCount }}</span>
-          </router-link>
-        </li>
-      </ul>
+      <div class="header-actions">
+        <div class="store-loc">
+          <span class="icon">📍</span>
+          <div class="text-group">
+            <span class="loc-store">Ottawa</span>
+            <span class="loc-status">Open until 9pm</span>
+          </div>
+        </div>
+        
+        <router-link to="/cart" class="cart-btn">
+          <span class="cart-icon">🛒</span>
+          <span class="cart-label">Cart</span>
+          <span class="cart-badge" v-if="cartItemCount > 0">{{ cartItemCount }}</span>
+        </router-link>
+      </div>
+    </div>
+    
+    <div class="bottom-strip">
+        <ul class="strip-links">
+            <li><a href="#">Top Deals</a></li>
+            <li><a href="#">Deal of the Day</a></li>
+            <li><a href="#">Totaltech Membership</a></li>
+            <li><a href="#">Credit Cards</a></li>
+            <li><a href="#">Gift Cards</a></li>
+        </ul>
     </div>
   </nav>
 </template>
@@ -31,159 +47,138 @@
 <script>
 export default {
   name: 'TopNav',
-  props: ['cartItemCount'],
-  data() {
-    return {
-      isNavOpen: false
-    }
-  },
-  methods: {
-    toggleNav() {
-      this.isNavOpen = !this.isNavOpen
-    },
-    closeNav() {
-      this.isNavOpen = false
-    }
-  }
+  props: ['cartItemCount']
 }
 </script>
 
 <style scoped>
-nav {
-  background-color: #0046be; /* Best Buy Blue */
-  color: #fff;
+.bby-header {
+  background-color: #0046be; /* Official Best Buy Blue */
   position: fixed;
   top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-  height: 70px;
-  display: flex;
-  align-items: center;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-}
-
-.nav-container {
   width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 1rem;
+  z-index: 9999;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
-.brand-text {
-  font-size: 1.5rem;
+.header-content {
+  display: flex;
+  align-items: center;
+  height: 75px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 16px;
+  gap: 20px;
+}
+
+/* LOGO */
+.bby-logo {
+  display: flex;
+  flex-direction: column;
+  line-height: 0.9;
+  text-decoration: none;
+  color: #000;
+  background-color: #ffce00; /* Best Buy Tag Yellow */
+  padding: 8px 12px;
   font-weight: 900;
-  color: #fff;
+  font-size: 20px;
   letter-spacing: -1px;
 }
 
-/* Search Bar Styling */
-.search-bar {
-  flex-grow: 1;
-  margin: 0 2rem;
+/* SEARCH */
+.search-container {
+  flex: 1;
   display: flex;
-  max-width: 600px;
+  height: 40px;
 }
 
-.search-bar input {
+.search-container input {
   width: 100%;
-  padding: 10px;
+  padding: 0 15px;
+  font-size: 16px;
   border: none;
   border-radius: 4px 0 0 4px;
-  font-size: 1rem;
+  outline: none;
 }
 
-.search-bar .search-btn {
-  background-color: #fff;
+.search-icon-btn {
+  background: white;
   border: none;
-  border-radius: 0 4px 4px 0;
   padding: 0 15px;
-  cursor: pointer;
-  font-size: 1.2rem;
-}
-
-.nav-links {
-  display: flex;
-  list-style: none;
-  font-size: 1rem;
-  font-weight: bold;
-  margin: 0;
-  padding: 0;
-  align-items: center;
-}
-
-.nav-links li {
-  margin-left: 1.5rem;
-}
-
-.nav-links a {
-  color: #fff;
-  text-decoration: none;
-}
-
-.nav-links a:hover {
-  text-decoration: underline;
-}
-
-.cart-link a {
-  display: flex;
-  align-items: center;
-}
-
-.badge {
-  background-color: #ffce00;
-  color: #000;
-  border-radius: 50%;
-  padding: 2px 6px;
-  font-size: 0.8rem;
-  margin-left: 5px;
-}
-
-/* Hamburger menu styles remain mostly the same */
-.hamburger {
-  display: none;
-  background: none;
-  border: none;
+  border-radius: 0 4px 4px 0;
   cursor: pointer;
 }
 
-@media (max-width: 768px) {
-  .search-bar {
-    display: none; /* Hide search on mobile to save space */
-  }
-  
-  .nav-links {
-    display: none;
-    position: absolute;
-    top: 70px;
-    left: 0;
-    right: 0;
-    background-color: #003da6;
-    flex-direction: column;
-    padding: 1rem;
-  }
+/* ACTIONS */
+.header-actions {
+  display: flex;
+  align-items: center;
+  color: white;
+  gap: 25px;
+}
 
-  .nav-links--open {
+.store-loc {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  cursor: pointer;
+}
+.text-group {
     display: flex;
-  }
-  
-  .nav-links li {
-    margin: 10px 0;
-  }
+    flex-direction: column;
+}
+.loc-store { font-weight: 700; }
 
-  .hamburger {
-    display: block;
-  }
-  
-  .hamburger-icon {
-    display: block;
-    width: 25px;
-    height: 3px;
-    background-color: #fff;
-    position: relative;
-  }
+.cart-btn {
+  display: flex;
+  align-items: center;
+  color: white;
+  text-decoration: none;
+  font-weight: 700;
+  position: relative;
+}
+
+.cart-icon { font-size: 24px; margin-right: 5px; }
+.cart-badge {
+    position: absolute;
+    top: -8px;
+    right: -10px;
+    background: #ffce00;
+    color: black;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+}
+
+/* BOTTOM STRIP */
+.bottom-strip {
+    background-color: #003da6; /* Slightly darker blue */
+    border-top: 1px solid rgba(255,255,255,0.2);
+    height: 40px;
+    display: flex;
+    align-items: center;
+}
+.strip-links {
+    list-style: none;
+    display: flex;
+    gap: 25px;
+    margin: 0 auto;
+    max-width: 1400px;
+    padding: 0 16px;
+    width: 100%;
+    font-size: 14px;
+    font-weight: 600;
+}
+.strip-links a { color: white; text-decoration: none; }
+.strip-links a:hover { text-decoration: underline; }
+
+@media(max-width: 768px) {
+    .bottom-strip, .store-loc { display: none; }
+    .header-content { gap: 10px; }
 }
 </style>
